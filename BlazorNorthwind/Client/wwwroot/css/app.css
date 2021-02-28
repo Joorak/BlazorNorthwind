@@ -1,6 +1,7 @@
-﻿@import url('open-iconic/font/css/open-iconic-bootstrap.min.css');
+﻿@import url('Font');
 
 html, body {
+    direction: rtl;
     font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
 }
 
@@ -15,6 +16,7 @@ a, .btn-link {
 }
 
 .content {
+    font-family: 'B Yekan' !important;
     padding-top: 1.1rem;
 }
 
