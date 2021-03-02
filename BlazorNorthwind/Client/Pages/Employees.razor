@@ -1,23 +1,26 @@
 ﻿@page "/Employees"
+@inject HttpClient Http
 
-
-<h1>Employee Data</h1>
+<h1>لیست کارمندان</h1>
 
 <div class="container">
-    <div class="row">
-        <div class="col-xs-3">
-            <button class="btn btn-primary" data-toggle="modal" data-target="#AddEditEmpModal" @onclick="AddEmployee">
+    <div class="row mt-2">
+        <div class="col-4">
+            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#AddEditEmpModal" @onclick="AddEmployee">
                 <i class="fa fa-user-plus"></i>
-                Add Employee
+                کارمند جدید
             </button>
         </div>
-        <div class="input-group col-md-4 offset-md-5">
-            <input type="text" class="form-control" placeholder="Search Employee" bind="@searchString" />
-            <div class="input-group-append">
-                <button class="btn btn-info" @onclick="SearchEmployee">
-                    <i class="fa fa-search"></i>
-                </button>
+        <div class="col-5 offset-3">
+            <div class="input-group">
+                <input type="text" class="form-control" placeholder="جستجو کارمند..." @bind="searchString" />
+                <div class="input-group-append">
+                    <button class="btn btn-info" @onclick="SearchEmployee">
+                        <i class="fa fa-search"></i>
+                    </button>
+                </div>
             </div>
+
         </div>
     </div>
 </div>
@@ -31,10 +34,10 @@ else
     <table class='table'>
         <thead>
             <tr>
-                <th>Name</th>
-                <th>Gender</th>
-                <th>Designation</th>
-                <th>City</th>
+                <th>نام</th>
+                <th>جنسیت</th>
+                <th>عنوان شغلی</th>
+                <th>شهر تولد</th>
             </tr>
         </thead>
         <tbody>
@@ -46,15 +49,15 @@ else
                     <td>@emp.Designation</td>
                     <td>@emp.CityName</td>
                     <td>
-                        <button class="btn btn-outline-dark" data-toggle="modal" data-target="#AddEditEmpModal"
+                        <button class="btn btn-outline-dark" data-bs-toggle="modal" data-bs-target="#AddEditEmpModal"
                                 @onclick="@(async () => await EditEmployee(@emp.EmployeeId))">
                             <i class="fa fa-pencil-square-o"></i>
-                            Edit
+                            ویرایش
                         </button>
-                        <button class="btn btn-outline-danger" data-toggle="modal" data-target="#deleteEmpModal"
+                        <button class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#deleteEmpModal"
                                 @onclick="@(async () => await DeleteConfirm(@emp.EmployeeId))">
                             <i class="fa fa-trash-o"></i>
-                            Delete
+                            حذف
                         </button>
                     </td>
                 </tr>
@@ -62,40 +65,40 @@ else
         </tbody>
     </table>
 }
-<div class="modal fade" id="AddEditEmpModal">
+<div class="modal fade" id="AddEditEmpModal"  aria-labelledby="AddEditEmpModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
                 <h3 class="modal-title">@modalTitle</h3>
-                <button type="button" class="close" data-dismiss="modal">
+                <button type="button" class="btn-close" data-bs-dismiss="modal">
                     <span aria-hidden="true">X</span>
                 </button>
             </div>
             <div class="modal-body">
                 <form>
                     <div class="form-group">
-                        <label class="control-label">Name</label>
-                        <input class="form-control" bind="@emp.EmployeeName" />
+                        <label class="control-label" >نام</label>
+                        <input class="form-control" @bind=emp.EmployeeName />
                     </div>
                     <div class="form-group">
-                        <label class="control-label">Gender</label>
-                        <select class="form-control" bind="@emp.Gender">
-                            <option value="">-- Select Gender --</option>
-                            <option value="Male">Male</option>
-                            <option value="Female">Female</option>
+                        <label class="control-label">جنسیت</label>
+                        <select class="form-control" @bind=emp.Gender>
+                            <option value="">-- جنسیت --</option>
+                            <option value="مرد">مرد</option>
+                            <option value="زن">زن</option>
                         </select>
                     </div>
                     <div class="form-group">
-                        <label class="control-label">Designation</label>
-                        <input class="form-control" bind="@emp.Designation" />
+                        <label class="control-label">عنوان شغلی</label>
+                        <input class="form-control" @bind=emp.Designation />
                     </div>
                     <div class="form-group">
-                        <label class="control-label">City</label>
-                        <select class="form-control" bind="@emp.CityName">
+                        <label class="control-label">شهر تولد</label>
+                        <select class="form-control" @bind=emp.CityName>
                             <option value="-- Select City --">-- Select City --</option>
                             @foreach (var city in cityList)
                             {
-                                <option value="@city.CityName">@city.CityName</option>
+                                <option value=@city.CityName>@city.CityName</option>
                             }
                         </select>
                     </div>
@@ -103,8 +106,8 @@ else
             </div>
             <div class="modal-footer">
                 <button class="btn btn-block btn-success"
-                        @onclick="(async () => await SaveEmployee())" data-dismiss="modal">
-                    Save
+                        @onclick="@(async () => await SaveEmployee())" data-bs-dismiss="modal">
+                    ثبت
                 </button>
             </div>
         </div>
@@ -114,49 +117,51 @@ else
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h3 class="modal-title">Confirm Delete !!!</h3>
-                <button type="button" class="close" data-dismiss="modal">
+                <h3 class="modal-title">تایید حذف !!!</h3>
+                <button type="button" class="close" data-bs-dismiss="modal">
                     <span aria-hidden="true">X</span>
                 </button>
             </div>
             <div class="modal-body">
                 <table class="table">
                     <tr>
-                        <td>Name</td>
+                        <td>نام</td>
                         <td>@emp.EmployeeName</td>
                     </tr>
                     <tr>
-                        <td>Gender</td>
+                        <td>جنسیت</td>
                         <td>@emp.Gender</td>
                     </tr>
                     <tr>
-                        <td>Designation</td>
+                        <td>عنوان شغلی</td>
                         <td>@emp.Designation</td>
                     </tr>
                     <tr>
-                        <td>City</td>
+                        <td>شهر تولد</td>
                         <td>@emp.CityName</td>
                     </tr>
                 </table>
             </div>
             <div class="modal-footer">
-                <button class="btn btn-danger" data-dismiss="modal"
+                <button class="btn btn-danger" data-bs-dismiss="modal"
                         @onclick="@(async () => await DeleteEmployee(@emp.EmployeeId))">
-                    Delete
+                    حذف
                 </button>
-                <button data-dismiss="modal" class="btn">Cancel</button>
+                <button data-bs-dismiss="modal" class="btn">انصراف</button>
             </div>
         </div>
     </div>
 </div>
 
 @code {
-        private HttpClient Http { get; set; }
+        //private HttpClient Http { get; set; }
         private List<Employee> empList = new List<Employee>();
         private List<Cities> cityList = new List<Cities>();
         private Employee emp = new Employee();
         private string modalTitle { get; set; }
         private string searchString { get; set; }
+
+
         protected override async Task  OnInitializedAsync()
         {
             await GetCityList();
@@ -174,12 +179,12 @@ else
         protected void AddEmployee()
         {
             emp = new Employee();
-            modalTitle = "Add Employee";
+            modalTitle = "ثبت کارمند جدید";
         }
         protected async Task EditEmployee(string empID)
         {
             emp = await Http.GetFromJsonAsync<Employee>("/api/Employee/" + empID);
-            modalTitle = "Edit Employee";
+            modalTitle = "ویرایش کارمند";
         }
         protected async Task SaveEmployee()
         {

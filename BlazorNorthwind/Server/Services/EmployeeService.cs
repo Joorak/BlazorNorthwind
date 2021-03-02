@@ -17,8 +17,8 @@ namespace BlazorNorthwind.Server.Services
         FirestoreDb fireStoreDb;
         public EmployeeService(IWebHostEnvironment HostEnvironment)
         {
-            string path = Path.Combine(HostEnvironment.WebRootPath, "blazornorthwind-c020c93cb718.json");
-            //string filepath = "C:\\FirestoreAPIKey\\blazornorthwind-c020c93cb718.json";
+            //string path = Path.Combine(HostEnvironment.ContentRootPath, "blazornorthwind-c020c93cb718.json");
+            string path = "C:\\blazornorthwind-c020c93cb718.json";
             Environment.SetEnvironmentVariable("GOOGLE_APPLICATION_CREDENTIALS", path);
             projectId = "blazornorthwind";
             fireStoreDb = FirestoreDb.Create(projectId);
@@ -127,7 +127,7 @@ namespace BlazorNorthwind.Server.Services
                 }
                 return lstCity;
             }
-            catch
+            catch 
             {
                 throw;
             }
