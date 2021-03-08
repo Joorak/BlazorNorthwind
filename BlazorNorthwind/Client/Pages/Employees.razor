@@ -31,13 +31,14 @@
 }
 else
 {
-    <table class='table'>
+    <table class="table">
         <thead>
             <tr>
                 <th>نام</th>
                 <th>جنسیت</th>
                 <th>عنوان شغلی</th>
                 <th>شهر تولد</th>
+                <th>عملیات</th>
             </tr>
         </thead>
         <tbody>
@@ -50,12 +51,12 @@ else
                     <td>@emp.CityName</td>
                     <td>
                         <button class="btn btn-outline-dark" data-bs-toggle="modal" data-bs-target="#AddEditEmpModal"
-                                @onclick="@(async () => await EditEmployee(@emp.EmployeeId))">
+                                @onclick="(async () => await EditEmployee(emp.EmployeeId))">
                             <i class="fa fa-pencil-square-o"></i>
                             ویرایش
                         </button>
                         <button class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#deleteEmpModal"
-                                @onclick="@(async () => await DeleteConfirm(@emp.EmployeeId))">
+                                @onclick="(async () => await DeleteConfirm(emp.EmployeeId))">
                             <i class="fa fa-trash-o"></i>
                             حذف
                         </button>
@@ -77,7 +78,7 @@ else
             <div class="modal-body">
                 <form>
                     <div class="form-group">
-                        <label class="control-label" >نام</label>
+                        <label class="control-label"  >نام</label>
                         <input class="form-control" @bind=emp.EmployeeName />
                     </div>
                     <div class="form-group">
@@ -106,7 +107,7 @@ else
             </div>
             <div class="modal-footer">
                 <button class="btn btn-block btn-success"
-                        @onclick="@(async () => await SaveEmployee())" data-bs-dismiss="modal">
+                        @onclick="(async () => await SaveEmployee())" data-bs-dismiss="modal">
                     ثبت
                 </button>
             </div>
